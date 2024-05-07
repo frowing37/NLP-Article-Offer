@@ -1,0 +1,3 @@
+A Multigrid Algorithm for the Mortar Finite Element Method.
+--A
+The objective of this paper is to develop and analyze a multigrid algorithm for the system of equations arising from the mortar finite element discretization of second order elliptic boundary value problems. In order to establish the inf-sup condition for the saddle point formulation and to motivate the subsequent treatment of the discretizations, we first revisit briefly the theoretical concept of the mortar finite element method. Employing suitable mesh-dependent norms we verify the validity of the Ladyzhenskaya

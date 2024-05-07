@@ -1,0 +1,3 @@
+Deciding the confluence of ordered term rewrite systems.
+--A
+replace me

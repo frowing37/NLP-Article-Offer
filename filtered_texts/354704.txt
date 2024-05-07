@@ -1,0 +1,3 @@
+Parametric Analysis of Computer Systems.
+--A
+A general parametric analysis problem which allows the use of parameter variables in both the real-time automata and the specifications is proposed and solved. The analysis algorithm is much simpler and can run more efficiently in average cases than can previous works.

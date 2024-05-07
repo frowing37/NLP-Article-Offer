@@ -1,0 +1,5 @@
+Local Convergence of the Symmetric Rank-One Iteration.
+--A
+We consider conditions under which the SR1 iteration is locally
+convergent. We apply the result to a pointwise structured SR1 method
+that has been used in optimal control.
