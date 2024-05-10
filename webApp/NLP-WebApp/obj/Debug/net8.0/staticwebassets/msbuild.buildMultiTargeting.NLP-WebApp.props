@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/NLP-WebApp.props" />
+</Project>
