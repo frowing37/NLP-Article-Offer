@@ -25,4 +25,5 @@ def read_txt_files(folder_path):
 # Örnek kullanım
 folder_path = "../filtered_texts"
 contents = read_txt_files(folder_path)
+print(contents)
 
