@@ -7,7 +7,7 @@ import fasttext
 import string
 
 # Metin
-text = "!fucked your, mommy?"
+text = "!fucked your, momming?"
 
 # Türkçe için stopwords'ları yükleme
 #nltk.download('stopwords')
@@ -35,7 +35,7 @@ stemmer = PorterStemmer()
 stemmed_words = [stemmer.stem(word) for word in filtered_words]
 
 # fasttext modellerini yüklüyor
-fasttext_model = fasttext.load_model('./cc.en.300.bin')
+fasttext_model = fasttext.load_model('/Users/frowing/Downloads/cc.en.300.bin')
 
 # fasttext modeliyle vektör karşılaştırmasını yapıyor
 vectors = [fasttext_model.get_word_vector(token) for token in stemmed_words]
