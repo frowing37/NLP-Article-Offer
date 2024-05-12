@@ -7,8 +7,8 @@ import json
 
 app = FastAPI()
 
-@app.post("/api/vectorInsert/{prm}")
-async def vectorInsert(prm: str, request: Request):
+@app.post("/api/vectorInsert")
+async def vectorInsert(request: Request):
     context = ConnectDB()
     data = await request.json()
     context.create(data)

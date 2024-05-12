@@ -1,29 +1,61 @@
 import os
+import numpy as np
 
-def read_txt_files(folder_path):
-    file_contents = []
-    
-    # Klasör yolunun varlığını kontrol et
-    if not os.path.exists(folder_path):
-        print("Hata: Belirtilen klasör bulunamadı.")
-        return None
-    
-    # Klasördeki tüm dosyaları gez
-    for file_name in os.listdir(folder_path):
-        if file_name.endswith('.txt'):  # Sadece .txt uzantılı dosyaları al
-            file_path = os.path.join(folder_path, file_name)
-            try:
-                # Dosyayı oku
-                with open(file_path, 'r', encoding='utf-8') as file:
-                    content = file.read()
-                    file_contents.append(content)
-            except Exception as e:
-                print(f"Hata: {file_path} dosyası okunamadı. Hata: {e}")
-    
-    return file_contents
+class DataRead:
+    def readFilesName(self):
+        folder_path = "../filtered_texts"
+        file_names = []
 
-# Örnek kullanım
-folder_path = "../filtered_texts"
-contents = read_txt_files(folder_path)
-print(contents)
+        for file_name in os.listdir(folder_path):
+            file_names.append(file_name)
 
+        return file_names
+
+    def readAllTxt(self):
+        folder_path = "../filtered_texts"
+        file_contents = []
+        
+        if not os.path.exists(folder_path):
+            raise FileNotFoundError("Belirtilen klasör bulunamadı.")
+        
+        for file_name in os.listdir(folder_path):
+            if file_name.endswith('.txt'):
+                file_path = os.path.join(folder_path, file_name)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        content = file.read()
+                        file_contents.append(content)
+                except Exception as e:
+                    print(f"Hata: {file_path} dosyası okunamadı. Hata: {e}")
+                    # Hata durumunda devam et
+                    continue
+        
+        return file_contents
+
+    def readTxtByName(self, file_name):
+        folder_path = "../filtered_texts"
+        file_contents = []
+        
+        if not os.path.exists(folder_path):
+            raise FileNotFoundError("Belirtilen klasör bulunamadı.")
+        
+        for file in os.listdir(folder_path):
+            if file.endswith('.txt') and file == file_name:
+                file_path = os.path.join(folder_path, file)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        content = file.read()
+                        file_contents.append(content)
+                except Exception as e:
+                    print(f"Hata: {file_path} dosyası okunamadı. Hata: {e}")
+                    # Hata durumunda devam et
+                    continue
+        
+        return file_contents
+
+    def cosine_similarity(vector1, vector2):
+      dot_product = np.dot(vector1, vector2)
+      norm_vector1 = np.linalg.norm(vector1)
+      norm_vector2 = np.linalg.norm(vector2)
+      similarity = dot_product / (norm_vector1 * norm_vector2)
+      return similarity

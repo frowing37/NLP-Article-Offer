@@ -1,52 +1,37 @@
+import fasttext
+import string
+import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-from snowballstemmer import TurkishStemmer
-import fasttext
-import string
 
-# Metin
-text = "!fucked your, momming?"
+class DataStem:
+    def __init__(self, model_path):
+        self.fasttext_model = fasttext.load_model(model_path)
 
-# Türkçe için stopwords'ları yükleme
-#nltk.download('stopwords')
+    def makeStem(self, contents):
+        all_stems = []
+        
+        for text in contents:
+            text_lower = text.lower()
+            text_no_punctuation = text_lower.translate(str.maketrans("", "", string.punctuation))
+            words = word_tokenize(text_no_punctuation, language='turkish')
+            stop_words = set(stopwords.words('turkish'))
+            filtered_words = [word for word in words if word not in stop_words and len(word) > 1]
+            stemmer = PorterStemmer()
+            stemmed_words = [stemmer.stem(word) for word in filtered_words]
+            
+            vectors = []
+            for token in stemmed_words:
+                vector = self.fasttext_model.get_word_vector(token)
+                if vector is not None:
+                    vectors.append(vector)
+            
+            if vectors:
+                # Vektörlerin ortalamasını al
+                avg_vector = np.mean(vectors, axis=0)
+                all_stems.append(avg_vector.tolist())  # JSON'a dönüştürülebilir hale getir
+                
+        return all_stems
 
-# Türkçe için dil modelini yükleme
-#nltk.download('punkt')
-
-# Metni küçük harflere dönüştürme
-text_lower = text.lower()
-
-# Noktalama işaretlerini kaldırma
-text_no_punctuation = text_lower.translate(str.maketrans("", "", string.punctuation))
-
-# Metni kelimelere ayırma
-words = word_tokenize(text_no_punctuation, language='turkish')
-
-# Türkçe stopwords'leri yükleme
-stop_words = set(stopwords.words('turkish'))
-
-# Stopwords'leri ve tek harfli kelimeleri temizleme
-filtered_words = [word for word in words if word not in stop_words and len(word) > 1]
-
-# Kelime köklerini bulma (Stemming)
-stemmer = PorterStemmer()
-stemmed_words = [stemmer.stem(word) for word in filtered_words]
-
-# fasttext modellerini yüklüyor
-fasttext_model = fasttext.load_model('/Users/frowing/Downloads/cc.en.300.bin')
-
-# fasttext modeliyle vektör karşılaştırmasını yapıyor
-vectors = [fasttext_model.get_word_vector(token) for token in stemmed_words]
-
-vectors_list = []
-for vector in vectors:
-    if vector is not None:
-        vectors_list.append(vector)
-
-
-# Sonuçları görüntüleme
-print("Temizlenmiş kelimeler:", filtered_words)
-print("Kökleri bulunmuş kelimeler:", stemmed_words)
-print("Vektörler:",vectors_list)
