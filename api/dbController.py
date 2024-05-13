@@ -15,8 +15,23 @@ async def vectorInsert(request: Request):
     return {"message": "Vektor başarıyla eklendi"}
 
 @app.get("/api/vectorGet/{prm}")
-async def vectorInsert(prm: str):
+async def vectorGet(prm: str):
     context = ConnectDB()
-    vectorJson = context.getByID(prm)
-    result = Vector(vectorJson["id"],vectorJson["vector"])
-    return {result}
+    vectorsJson = context.getAll()
+
+    for temp in vectorsJson:
+        theVectorJson = temp['vector']
+        if theVectorJson['name'] == prm:
+            result = Vector(theVectorJson["name"],theVectorJson["vector"])
+            if result is None:
+                errorMessage = prm + " ID'li öğe bulunamadı"
+                return {"errorMessage": errorMessage}        
+            else:
+             return { result }
+
+    #if vectorJson is None:
+     #   errorMessage = prm + " ID'li öğe bulunamadı"
+      #  return {"errorMessage": errorMessage}
+    #result = Vector(vectorJson["name"],vectorJson["vector"])
+    
+    return {"ERROR"} 

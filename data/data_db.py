@@ -10,14 +10,11 @@ class ConnectDB:
         result = self.collection.insert_one(data)
         return result.inserted_id
 
-    def getAll(self, query=None):
-        if query:
-            return self.collection.find(query)
-        else:
-            return self.collection.find()
+    def getAll(self):
+        return self.collection.find()
 
-    def getByID(self, object_id):
-        return self.collection.find_one({"id": object_id})
+    def getByID(self,field_name ,name):
+     return self.collection.find_one({field_name: name})
 
     def update(self, query, new_data):
         result = self.collection.update_many(query, {"$set": new_data})

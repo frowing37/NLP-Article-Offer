@@ -35,14 +35,38 @@ async def makeVektor(prm : str):
 
      return {"vector": vector}   
 
-@app.get("/api/calculateSimilarity/{prm1}+{prm2}")
-async def makeVektorAll(prm1: str, prm2: str):
+@app.get("/api/calculateSimilarity")
+async def calculateSimilarity(request: Request):
     getter = DataRead()
     context = ConnectDB()
-    vector1 = prm1
-    vector2 = prm2
-    vector1Json = context.getByID(vector1)
-    vector2Json = context.getByID(vector2)
-    similarity = getter.cosine_similarity(vector1Json["vector"],vector2Json["vector"])
+    data = await request.json()
 
-    return {similarity}
+    if data is None:
+        error_message = "Parametre boş dönüyor"
+        return {"error": error_message}
+
+    vector1ID = data["vector1"]
+    vector2ID = data["vector2"]
+    allVector = context.getAll()
+    vector1Json = None
+    vector2Json = None
+
+    for temp in allVector:
+        vector = temp['vector']
+        if  vector1ID == vector['name']:
+            vector1Json = vector
+        elif vector2ID == vector['name']:
+            vector2Json = vector
+
+
+        if vector1Json is not None and vector2Json is not None:
+            similarity = getter.cosine_similarity(vector1Json['vector'], vector2Json['vector'])
+            return { "similarityRate" : round(similarity * 100, 2) }
+
+    if vector1Json is None or vector2Json is None:
+        error_message = "Bir veya daha fazla JSON değeri None olarak belirlendi."
+        return {"error": error_message}
+    
+    
+    return {'ERROR'}
+    

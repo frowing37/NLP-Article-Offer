@@ -1,5 +1,7 @@
 import os
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 class DataRead:
     def readFilesName(self):
@@ -53,9 +55,8 @@ class DataRead:
         
         return file_contents
 
-    def cosine_similarity(vector1, vector2):
-      dot_product = np.dot(vector1, vector2)
-      norm_vector1 = np.linalg.norm(vector1)
-      norm_vector2 = np.linalg.norm(vector2)
-      similarity = dot_product / (norm_vector1 * norm_vector2)
-      return similarity
+    def cosine_similarity(self, vector1, vector2):
+     vector1_array = np.array(vector1)
+     vector2_array = np.array(vector2)
+     similarity = cosine_similarity(vector1_array.reshape(1, -1), vector2_array.reshape(1, -1))[0, 0]
+     return similarity
