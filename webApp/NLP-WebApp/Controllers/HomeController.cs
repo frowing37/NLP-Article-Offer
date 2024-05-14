@@ -20,11 +20,6 @@ public class HomeController : Controller
         _userManager = userManager;
     }
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
     [HttpGet]
     public IActionResult LogAndReg()
     {
@@ -78,11 +73,6 @@ public class HomeController : Controller
     }
 
     public IActionResult Info()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
     {
         return View();
     }
