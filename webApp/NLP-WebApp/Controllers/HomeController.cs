@@ -38,7 +38,7 @@ public class HomeController : Controller
 
         if (result.Result.Succeeded)
         {
-            var redirectUrl = "/Home/Info";
+            var redirectUrl = "/Article/SetInterest";
 
             return Json(new { redirectUrl });
         }
@@ -74,7 +74,7 @@ public class HomeController : Controller
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(newUser, false);
-                return RedirectToAction("Info", "Home");
+                return RedirectToAction("SetInterest", "Article");
             }
             else
             {
@@ -83,11 +83,6 @@ public class HomeController : Controller
         }
 
         return RedirectToAction("Error", "Home");
-    }
-
-    public IActionResult Info()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -18,8 +18,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /Users/frowing/Projects/NLP/webApp/NLP-WebApp
 build_property._RazorSourceGeneratorDebug = 
 
-[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Home/Info.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmZvLmNzaHRtbA==
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Article/AllArticle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJ0aWNsZS9BbGxBcnRpY2xlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Article/InterestArticle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJ0aWNsZS9JbnRlcmVzdEFydGljbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Article/SetInterest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXJ0aWNsZS9TZXRJbnRlcmVzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Home/LogAndReg.cshtml]
@@ -44,6 +52,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0xheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/_ValidationScriptsPartial.cshtml]

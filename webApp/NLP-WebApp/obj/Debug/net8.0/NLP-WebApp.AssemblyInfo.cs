@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NLP-WebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8c7a2f9c477e94b2452679b0ef3ab49c13a7ff0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+076d659b41d270d5ca87587061c35acaaff93d48")]
 [assembly: System.Reflection.AssemblyProductAttribute("NLP-WebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NLP-WebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
