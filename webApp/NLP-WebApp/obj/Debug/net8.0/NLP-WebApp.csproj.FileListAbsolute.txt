@@ -21,9 +21,7 @@
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.NLP-WebApp.props
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.NLP-WebApp.props
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/staticwebassets.pack.json
-/Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/scopedcss/bundle/NLP-WebApp.styles.css
-/Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/scopedcss/projectbundle/NLP-WebApp.bundle.scp.css
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/NLP-WebApp.dll
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/refint/NLP-WebApp.dll
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/NLP-WebApp.pdb

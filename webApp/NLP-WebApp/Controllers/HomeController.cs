@@ -27,7 +27,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginDto loginDto)
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Mail);
 
@@ -37,39 +37,52 @@ public class HomeController : Controller
         var result = _signInManager.PasswordSignInAsync(user, loginDto.Password, false,false);
 
         if (result.Result.Succeeded)
-            return RedirectToAction("Info", "Home");
+        {
+            var redirectUrl = "/Home/Info";
+
+            return Json(new { redirectUrl });
+        }
         else
-            return RedirectToAction("LogAndReg", "Home");
+        {
+            var redirectUrl = "/Home/Error";
+
+            return Json(new { redirectUrl });
+        }
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterDto registerDto)
+    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
-        var user = await _userManager.FindByEmailAsync(registerDto.Mail);
+        if (ModelState.IsValid)
+        {
+            var user = await _userManager.FindByEmailAsync(registerDto.Mail);
         
-        if(user is not null)
-            return RedirectToAction("LogAndReg", "Home");
+            if(user is not null)
+                return RedirectToAction("LogAndReg", "Home");
 
-        AppUser newUser = new AppUser()
-        {
-            UserName = registerDto.Name,
-            Email = registerDto.Mail
-        };
+            AppUser newUser = new AppUser()
+            {
+                UserName = registerDto.Name,
+                Email = registerDto.Mail
+            };
             
-        var passwordHasher = new PasswordHasher<AppUser>();
-        newUser.PasswordHash = passwordHasher.HashPassword(newUser, registerDto.Password);
+            var passwordHasher = new PasswordHasher<AppUser>();
+            newUser.PasswordHash = passwordHasher.HashPassword(newUser, registerDto.Password);
 
-        var result = await _userManager.CreateAsync(newUser);
+            var result = await _userManager.CreateAsync(newUser);
 
-        if (result.Succeeded)
-        {
-            _signInManager.SignInAsync(newUser, false);
-            return RedirectToAction("Info", "Home");
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(newUser, false);
+                return RedirectToAction("Info", "Home");
+            }
+            else
+            {
+                return RedirectToAction("LogAndReg", "Home");
+            }
         }
-        else
-        {
-            return RedirectToAction("LogAndReg", "Home");
-        }
+
+        return RedirectToAction("Error", "Home");
     }
 
     public IActionResult Info()

@@ -8,6 +8,6 @@ public class Context : IdentityDbContext<AppUser,AppRole,int>
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Server=localhost,1433;Database=NLP;User Id=SA;Password=reallyStrongPwd123;");
+        optionsBuilder.UseSqlServer("Server=localhost,1433;Database=NLP;User Id=SA;Password=reallyStrongPwd123;TrustServerCertificate=True;Encrypt=false;");
     }
 }

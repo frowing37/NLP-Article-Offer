@@ -26,6 +26,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Mb2dBbmRSZWcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Components/_LayoutMainPanelComponent/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvX0xheW91dE1haW5QYW5lbENvbXBvbmVudC9EZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Components/_LayoutNavbarComponent/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvX0xheW91dE5hdmJhckNvbXBvbmVudC9EZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Components/_LayoutScriptComponent/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvX0xheW91dFNjcmlwdENvbXBvbmVudC9EZWZhdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Components/_LayoutSidebarComponent/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvX0xheW91dFNpZGViYXJDb21wb25lbnQvRGVmYXVsdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/frowing/Projects/NLP/webApp/NLP-WebApp/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

@@ -28,15 +28,17 @@
 								<div class="center-wrap">
 									<div class="section text-center">
 										<h4 class="mb-4 pb-3">Giriş</h4>
-										<div class="form-group">
-											<input type="email" name="logemail" class="form-style" placeholder="Mail" id="logemail" autocomplete="off">
-											<i class="input-icon uil uil-at"></i>
-										</div>
-										<div class="form-group mt-2">
-											<input type="password" name="logpass" class="form-style" placeholder="Şifre" id="logpass" autocomplete="off">
-											<i class="input-icon uil uil-lock-alt"></i>
-										</div>
-										<a href="#" class="btn mt-4">Giriş</a>
+										<form id="loginOk">
+											<div class="form-group">
+												<input type="email" name="logmail" class="form-style" placeholder="Mail" id="logmail" autocomplete="off">
+												<i class="input-icon uil uil-at"></i>
+											</div>
+											<div class="form-group mt-2">
+												<input type="password" name="logpass" class="form-style" placeholder="Şifre" id="logpass" autocomplete="off">
+												<i class="input-icon uil uil-lock-alt"></i>
+											</div>
+											<button class="btn mt-4" type="submit">Giriş</button>
+										</form>
 										<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Şifrenizi mi unuttunuz ?</a></p>
 									</div>
 								</div>
@@ -45,19 +47,21 @@
 								<div class="center-wrap">
 									<div class="section text-center">
 										<h4 class="mb-4 pb-3">Kayıt Ol</h4>
-										<div class="form-group">
-											<input type="text" name="logname" class="form-style" placeholder="İsim" id="logname" autocomplete="off">
-											<i class="input-icon uil uil-user"></i>
-										</div>
-										<div class="form-group mt-2">
-											<input type="email" name="logemail" class="form-style" placeholder="Mail" id="logemail" autocomplete="off">
-											<i class="input-icon uil uil-at"></i>
-										</div>
-										<div class="form-group mt-2">
-											<input type="password" name="logpass" class="form-style" placeholder="Şifre" id="logpass" autocomplete="off">
-											<i class="input-icon uil uil-lock-alt"></i>
-										</div>
-										<a href="#" class="btn mt-4">Tamamla</a>
+										<form id="registerOk">
+											<div class="form-group">
+												<input type="text" name="logname" class="form-style" placeholder="İsim" id="regname" autocomplete="off">
+												<i class="input-icon uil uil-user"></i>
+											</div>
+											<div class="form-group mt-2">
+												<input type="email" name="logemail" class="form-style" placeholder="Mail" id="regmail" autocomplete="off">
+												<i class="input-icon uil uil-at"></i>
+											</div>
+											<div class="form-group mt-2">
+												<input type="password" name="logpass" class="form-style" placeholder="Şifre" id="regpass" autocomplete="off">
+												<i class="input-icon uil uil-lock-alt"></i>
+											</div>
+											<button href="#" class="btn mt-4" onclick="register()">Tamamla</button>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -71,7 +75,104 @@
 </body>
 </html>
 
+<script>
+class LoginDto {
+		constructor(mail,password) {
+			this.mail = mail;
+			this.password = password;
+		}
+}
 
+class RegisterDto {
+		constructor(name, mail, password) {
+			this.name = name;
+			this.mail = mail;
+			this.password = password;
+		}
+}
+
+function login() {
+	
+	var mail = document.getElementById('logmail').value;
+	var password = document.getElementById('logpass').value;
+	
+	var loginDto = new LoginDto(mail,password);
+	
+	fetch("/Home/Login", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+			},
+			body: JSON.stringify(loginDto)
+	})
+	.then(response => {
+		if (response.ok) {
+			return response.json();
+		}
+		throw new Error("Network response was not ok.");
+	})
+	.then(data => {
+		console.log("Success:", data);
+	}).catch(error => {
+		console.error("There was a problem with the fetch operation:", error);
+	});
+}
+
+function register() {
+	
+	var name = document.getElementById('regname').value;
+	var mail = document.getElementById('regmail').value;
+    var password = document.getElementById('regpass').value;
+	
+	var registerDto = new RegisterDto(name, mail,password);
+	
+	fetch("/Home/Register", {
+    		method: "POST",
+    		headers: {
+    			"Content-Type": "application/json"
+    			},
+    			body: JSON.stringify(registerDto)
+    	})
+    	.then(response => {
+    		if (response.ok) {
+    			return response.json();
+    		}
+    		throw new Error("Network response was not ok.");
+    	})
+    	.then(data => {
+    		console.log("Success:", data);
+    	}).catch(error => {
+    		console.error("There was a problem with the fetch operation:", error);
+    	});
+}
+
+document.querySelector('#loginOk').addEventListener('submit', function (e) {
+    e.preventDefault();
+    
+    var mail = document.getElementById('logmail').value;
+    var password = document.getElementById('logpass').value;
+    
+    const loginDto = new LoginDto(mail, password);
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/Home/Login/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 302) {     
+                var response = JSON.parse(xhr.responseText);
+                if (response.redirectUrl) {
+                    window.location.href = response.redirectUrl;
+                }
+            } else {
+                console.error("Error: " + xhr.status); // Hata mesajını logla
+            }
+        }
+    };
+    xhr.send(JSON.stringify(loginDto));
+});
+
+</script>
 
 <style>
 	@@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
@@ -217,8 +318,6 @@
       z-index: 20;
       display: block;
     }
-    
-    
     .form-group{
       position: relative;
       display: block;
