@@ -21,10 +21,11 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Eklenmiş Olan İlgi Alanları</h4>
-      <div class="form-group row">
-        <i class="mdi mdi-check"></i>
+      <div class="form-group">
+        <div class="row">
         @foreach (var i in Model)
         {
+          <i class="mdi mdi-check" style="margin-left: 45px;"></i>
           <label for="exampleInputEmail2" class="col-sm-3 col-form-label">@i.Word</label>
           <div class="col-sm-6">
             <a href="/Article/DeleteInterest/@i.ID">
@@ -32,6 +33,7 @@
             </a>
           </div>
         }
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +50,8 @@ class interest {
   document.querySelector('#interestAdd').addEventListener('submit', function (e) {
       e.preventDefault();
       
-      const word = new interest(0,0,document.getElementById('inputInterest').value);
+      var interestWord = document.getElementById('inputInterest').value
+      const word = new interest(0, 0, interestWord);
       
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/Article/SetInterest/', true);

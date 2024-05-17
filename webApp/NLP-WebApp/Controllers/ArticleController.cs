@@ -39,7 +39,7 @@ public class ArticleController : Controller
     }
 
     [HttpPost]
-    public IActionResult SetInterest(InterestDto interest)
+    public IActionResult SetInterest([FromBody]InterestDto interest)
     {
         var userId = HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         _interestService.Insert(new Interest()
@@ -47,8 +47,10 @@ public class ArticleController : Controller
             UserID = Convert.ToInt32(userId),
             Word = interest.Word
         });
+        
+        var redirectUrl = "/Article/SetInterest";
 
-        return View();
+        return Json(new { redirectUrl });
     }
     
     public IActionResult DeleteInterest(int ID)
