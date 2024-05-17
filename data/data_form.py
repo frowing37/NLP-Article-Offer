@@ -16,8 +16,8 @@ class DataStem:
         for text in contents:
             text_lower = text.lower()
             text_no_punctuation = text_lower.translate(str.maketrans("", "", string.punctuation))
-            words = word_tokenize(text_no_punctuation, language='turkish')
-            stop_words = set(stopwords.words('turkish'))
+            words = word_tokenize(text_no_punctuation, language='english')
+            stop_words = set(stopwords.words('english'))
             filtered_words = [word for word in words if word not in stop_words and len(word) > 1]
             stemmer = PorterStemmer()
             stemmed_words = [stemmer.stem(word) for word in filtered_words]

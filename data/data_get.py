@@ -2,6 +2,8 @@ import os
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
+from model.articleModel import articleModel
+
 
 class DataRead:
     def readFilesName(self):
@@ -26,7 +28,8 @@ class DataRead:
                 try:
                     with open(file_path, 'r', encoding='utf-8') as file:
                         content = file.read()
-                        file_contents.append(content)
+                        articleObject = articleModel(file_name,content)
+                        file_contents.append(articleObject)
                 except Exception as e:
                     print(f"Hata: {file_path} dosyası okunamadı. Hata: {e}")
                     # Hata durumunda devam et

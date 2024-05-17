@@ -1,13 +1,21 @@
 from fastapi import FastAPI, Request
 import sys
-sys.path.append("/Users/frowing/Projects/NLP")
+
+sys.path.append("/Users/frowing/Projects/NLP/")
 from data.data_db import ConnectDB
 from data.data_get import DataRead
 from data.data_form import DataStem
+from data.data_form2 import DataStem2
 from model.vector import Vector
 import json
 
 app = FastAPI()
+
+@app.get("/api/getAllArticle")
+async def getAllArticle():
+    getter = DataRead()
+    articles = getter.readAllTxt()
+    return articles
 
 @app.get("/api/makeVectorAll/")
 async def makeVektorAll():
@@ -34,6 +42,26 @@ async def makeVektor(prm : str):
      vector = Vector(id,vectors)
 
      return {"vector": vector}   
+
+@app.post("/api/makeVectorByID2/{prm}")
+async def makeVektor2(prm : str):
+      id = prm
+      getter = DataRead()
+      former = DataStem2()
+      content = getter.readTxtByName(id + ".txt")    
+      vectors = former.makeStem(content)
+      vector = Vector(id,vectors)
+
+      return {"vector": vector}   
+
+@app.post("/api/makeVectorByWord/{prm}")
+async def makeVektor3(prm : str):
+      content = prm
+      former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
+      vectors = former.makeStem(content)
+      vector = Vector(id,vectors)
+
+      return {"vector": vector}  
 
 @app.get("/api/calculateSimilarity")
 async def calculateSimilarity(request: Request):
