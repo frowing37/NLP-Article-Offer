@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NLP_WebApp.Abstract;
 using NLP_WebApp.Models.Dtos;
 using NLP_WebApp.Models.Entity;
@@ -8,15 +9,32 @@ namespace NLP_WebApp.Controllers;
 public class ArticleController : Controller
 {
     private readonly IInterest _interestService;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public ArticleController(IInterest interestService) => _interestService = interestService;
+    public ArticleController(IInterest interestService, IHttpClientFactory httpClientFactory)
+    {
+        _interestService = interestService;
+        _httpClientFactory = httpClientFactory;
+    }
     public IActionResult InterestArticle()
     {
         return View();
     }
     
-    public IActionResult AllArticle()
+    public async Task<IActionResult> AllArticle()
     {
+        var client = _httpClientFactory.CreateClient();
+        var responseMessage = await client.GetAsync("http://localhost:8000/api/getAllArticle");
+
+        if(responseMessage.IsSuccessStatusCode)
+        {
+            var jsonData = await responseMessage.Content.ReadAsStringAsync();
+            var values = JsonConvert.DeserializeObject<List<ArticleDto>>(jsonData);
+
+            var articles = values.Take(10).ToList();
+            
+            return View(articles);
+        }
         return View();
     }
     

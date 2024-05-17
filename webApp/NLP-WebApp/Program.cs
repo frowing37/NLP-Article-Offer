@@ -17,6 +17,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 builder.Services.AddScoped<IInterest, efInterest>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

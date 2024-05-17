@@ -139,3 +139,4 @@
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/NLP-WebApp.csproj.AssemblyReference.cache
 /Users/frowing/Projects/NLP/webApp/NLP-WebApp/obj/Debug/net8.0/NLP-WebApp.csproj.Up2Date
+/Users/frowing/Projects/NLP/webApp/NLP-WebApp/bin/Debug/net8.0/Newtonsoft.Json.dll
