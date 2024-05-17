@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NLP_WebApp.Abstract;
 using NLP_WebApp.Models.Entity;
 using NLP_WebApp.Models.Data;
+using NLP_WebApp.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     option.LoginPath = "/Home/LogAndReg";
     option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 });
+
+builder.Services.AddScoped<IInterest, efInterest>();
 
 var app = builder.Build();
 

@@ -10,4 +10,6 @@ public class Context : IdentityDbContext<AppUser,AppRole,int>
     {
         optionsBuilder.UseSqlServer("Server=localhost,1433;Database=NLP;User Id=SA;Password=reallyStrongPwd123;TrustServerCertificate=True;Encrypt=false;");
     }
+    
+    public DbSet<Interest> Interests { get; set; }
 }
