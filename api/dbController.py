@@ -9,14 +9,14 @@ app = FastAPI()
 
 @app.post("/api/vectorInsert")
 async def vectorInsert(request: Request):
-    context = ConnectDB()
+    context = ConnectDB("Scibert")
     data = await request.json()
     context.create(data)
     return {"message": "Vektor başarıyla eklendi"}
 
 @app.get("/api/vectorGet/{prm}")
 async def vectorGet(prm: str):
-    context = ConnectDB()
+    context = ConnectDB("try1")
     vectorsJson = context.getAll()
 
     for temp in vectorsJson:
@@ -28,10 +28,5 @@ async def vectorGet(prm: str):
                 return {"errorMessage": errorMessage}        
             else:
              return { result }
-
-    #if vectorJson is None:
-     #   errorMessage = prm + " ID'li öğe bulunamadı"
-      #  return {"errorMessage": errorMessage}
-    #result = Vector(vectorJson["name"],vectorJson["vector"])
     
     return {"ERROR"} 

@@ -17,19 +17,22 @@ async def getAllArticle():
     articles = getter.readAllTxt()
     return articles
 
-@app.get("/api/makeVectorAll/")
+@app.post("/api/makeVectorAll/")
 async def makeVektorAll():
     getter = DataRead()
+    context = ConnectDB()
     former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
-    fileNames = getter.readFilesName()
+    articles = getter.readAllTxt()
     vektor_list = []
 
-    for fileName in fileNames:
-       content = getter.readTxtByName(fileName)
-       vektor = former.makeStem(content)
-       vektor_list.append(Vector(fileName,vektor))
+    for article in articles:
+       vektor = former.makeStem(article.content)
+       vektor_list.append(Vector(article.filename, vektor))
 
-    return {vektor_list}
+    for vektor in vektor_list:
+      context.create(vektor.to_json())
+
+    return {"Başarıyla Tamamlandı"}
 
 @app.post("/api/makeVectorByID/{prm}")
 async def makeVektor(prm : str):
@@ -52,7 +55,7 @@ async def makeVektor2(prm : str):
       vectors = former.makeStem(content)
       vector = Vector(id,vectors)
 
-      return {"vector": vector}   
+      return {"vector": vector }   
 
 @app.post("/api/makeVectorByWord/{prm}")
 async def makeVektor3(prm : str):

@@ -32,7 +32,6 @@ class DataRead:
                         file_contents.append(articleObject)
                 except Exception as e:
                     print(f"Hata: {file_path} dosyası okunamadı. Hata: {e}")
-                    # Hata durumunda devam et
                     continue
         
         return file_contents
