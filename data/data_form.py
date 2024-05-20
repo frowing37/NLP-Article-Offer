@@ -11,9 +11,14 @@ class DataStem:
         self.fasttext_model = fasttext.load_model(model_path)
 
     def makeStem(self, contents):
+        #nltk.download('punkt')
+        #nltk.download('stopwords')
+
         all_stems = []
         
         for text in contents:
+            if not text.strip():
+              continue
             text_lower = text.lower()
             text_no_punctuation = text_lower.translate(str.maketrans("", "", string.punctuation))
             words = word_tokenize(text_no_punctuation, language='english')

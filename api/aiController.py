@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 import sys
+import re
 
 sys.path.append("/Users/frowing/Projects/NLP/")
 from data.data_db import ConnectDB
@@ -7,6 +8,7 @@ from data.data_get import DataRead
 from data.data_form import DataStem
 from data.data_form2 import DataStem2
 from model.vector import Vector
+from model.arrangementModel import arrangementModel
 import json
 
 app = FastAPI()
@@ -17,24 +19,43 @@ async def getAllArticle():
     articles = getter.readAllTxt()
     return articles
 
-@app.post("/api/makeVectorAll/")
+@app.post("/api/makeVectorAllwithFasttext/")
 async def makeVektorAll():
     getter = DataRead()
-    context = ConnectDB()
+    context = ConnectDB('FastText')
     former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
     articles = getter.readAllTxt()
     vektor_list = []
+    noNeed = ".txt"
+
+    for article in articles:
+        vektor = former.makeStem([article.content])  # `article.content`'i listeye alıyoruz
+        vektor_list.append(Vector(re.sub(noNeed,"",article.filename), vektor))
+
+    for vektor in vektor_list:
+        context.create(vektor.to_dict())  # `to_dict` metodunu kullanarak veriyi ekliyoruz
+
+    return {"Başarıyla Tamamlandı"}
+
+@app.post("/api/makeVectorAllwithScibert/")
+async def makeVektorAll():
+    getter = DataRead()
+    context = ConnectDB("Scibert")
+    former = DataStem2()
+    articles = getter.readAllTxt()
+    vektor_list = []
+    noNeed = ".txt"
 
     for article in articles:
        vektor = former.makeStem(article.content)
-       vektor_list.append(Vector(article.filename, vektor))
+       vektor_list.append(Vector(re.sub(noNeed,"",article.filename), vektor))
 
     for vektor in vektor_list:
       context.create(vektor.to_json())
 
     return {"Başarıyla Tamamlandı"}
 
-@app.post("/api/makeVectorByID/{prm}")
+@app.post("/api/makeVectorByIDwithFasttext/{prm}")
 async def makeVektor(prm : str):
      id = prm
      getter = DataRead()
@@ -46,7 +67,7 @@ async def makeVektor(prm : str):
 
      return {"vector": vector}   
 
-@app.post("/api/makeVectorByID2/{prm}")
+@app.post("/api/makeVectorByIDwithScibert/{prm}")
 async def makeVektor2(prm : str):
       id = prm
       getter = DataRead()
@@ -57,14 +78,23 @@ async def makeVektor2(prm : str):
 
       return {"vector": vector }   
 
-@app.post("/api/makeVectorByWord/{prm}")
+@app.post("/api/makeVectorByWordwithFasttext/{prm}")
+async def makeVektor3(prm: str):
+    content = [prm]
+    former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
+    vectors = former.makeStem(content)
+    vector = Vector(prm, vectors)
+    return json.loads(vector.to_json())
+
+
+@app.post("/api/makeVectorByWordwithScibert/{prm}")
 async def makeVektor3(prm : str):
       content = prm
-      former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
+      former = DataStem2()
       vectors = former.makeStem(content)
-      vector = Vector(id,vectors)
+      vector = Vector(content,vectors)
 
-      return {"vector": vector}  
+      return {"vector": vector}
 
 @app.get("/api/calculateSimilarity")
 async def calculateSimilarity(request: Request):
@@ -101,3 +131,25 @@ async def calculateSimilarity(request: Request):
     
     return {'ERROR'}
     
+@app.get("/api/forInterestFastText/{prm}")
+async def forInterestFastText(prm : str):
+    interestWord = prm
+    context = ConnectDB("FastText")
+    getter = DataRead()
+    former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
+    interestVector = former.makeStem(interestWord)
+    articles = context.getAll()
+    suggestionList = []
+
+    for tempVector in articles:
+      vector = tempVector['vector']
+      print(vector)
+      rate = getter.cosine_similarity(interestVector, vector)
+      vector = arrangementModel(tempVector['name'], rate, "FastText")
+      suggestionList.append(vector)
+
+    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
+
+    suggestionResult = suggestionList[:5]
+    
+    return { suggestionList }
