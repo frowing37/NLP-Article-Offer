@@ -85,6 +85,19 @@ public class HomeController : Controller
         return RedirectToAction("Error", "Home");
     }
 
+    public async Task<IActionResult> ProfilDetail()
+    {
+        
+        
+        return View();
+    }
+
+    public IActionResult Logout()
+    {
+        _signInManager.SignOutAsync();
+        return RedirectToAction("LogAndReg", "Home");
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

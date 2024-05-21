@@ -2,14 +2,14 @@
     Layout = "/Views/Shared/Layout.cshtml";
 }
 
-@model List<NLP_WebApp.Models.Dtos.ArticleDto>
+@model List<NLP_WebApp.Models.Dtos.ResultArticle>
 
 @foreach (var article in Model)
 {
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">@article.FileName</h4>
+                <h4 class="card-title">@article.Header</h4>
                 <p>@article.Content</p>
                 <button type="button" class="btn btn-inverse-info btn-fw">Detay</button>
                 <button type="button" class="btn btn-inverse-primary btn-fw">Ekle</button>
