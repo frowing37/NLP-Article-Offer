@@ -1,0 +1,73 @@
+@{
+    Layout = "/Views/Shared/Layout.cshtml";
+}
+@model List<NLP_WebApp.Models.Dtos.InterestDto>
+
+<div class="col-md-6 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">İlgi Alanı Ekleme Formu</h4>
+      <form class="forms-sample" id="interestAdd">
+        <div class="form-group">
+          <label>İlgi Alanı</label>
+          <input type="text" class="form-control" id="inputInterest">
+        </div>
+        <button type="submit" class="btn btn-primary mr-2">Ekle</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="col-md-6 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Eklenmiş Olan İlgi Alanları</h4>
+      <div class="form-group">
+        <div class="row">
+        @foreach (var i in Model)
+        {
+          <i class="mdi mdi-check" style="margin-left: 45px;"></i>
+          <label for="exampleInputEmail2" class="col-sm-3 col-form-label">@i.Word</label>
+          <div class="col-sm-6">
+            <a href="/Article/DeleteInterest/@i.ID">
+              <button class="btn btn-inverse-danger btn-fw">Sil</button>
+            </a>
+          </div>
+        }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+class interest {
+  constructor(id1,id2,word) {
+        this.id1 = id1;
+        this.id2 = id2;
+  			this.word = word;
+  		}
+}
+  document.querySelector('#interestAdd').addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      var interestWord = document.getElementById('inputInterest').value
+      const word = new interest(0, 0, interestWord);
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/Article/SetInterest/', true);
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+              if (xhr.status === 200 || xhr.status === 302) {     
+                  var response = JSON.parse(xhr.responseText);
+                  if (response.redirectUrl) {
+                      window.location.href = response.redirectUrl;
+                  }
+              } else {
+                  console.error("Error: " + xhr.status); // Hata mesajını logla
+              }
+          }
+      };
+      xhr.send(JSON.stringify(word));
+  });
+</script>
