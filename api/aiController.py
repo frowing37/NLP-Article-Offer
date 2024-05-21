@@ -19,6 +19,12 @@ async def getAllArticle():
     articles = getter.readAllTxt()
     return articles
 
+@app.get("/api/getArticleByID/{prm}")
+async def getAllArticle(prm: str):
+    getter = DataRead()
+    article = getter.readTxtByName(prm + ".txt")
+    return article
+
 @app.post("/api/makeVectorAllwithFasttext/")
 async def makeVektorAll():
     getter = DataRead()
@@ -33,25 +39,25 @@ async def makeVektorAll():
         vektor_list.append(Vector(re.sub(noNeed,"",article.filename), vektor))
 
     for vektor in vektor_list:
-        context.create(vektor.to_dict())  # `to_dict` metodunu kullanarak veriyi ekliyoruz
+        context.create(vektor.to_dict())
 
     return {"Başarıyla Tamamlandı"}
 
-@app.post("/api/makeVectorAllwithScibert/")
+@app.post("/api/makeVectorAllwithScibert")
 async def makeVektorAll():
     getter = DataRead()
     context = ConnectDB("Scibert")
     former = DataStem2()
     articles = getter.readAllTxt()
-    vektor_list = []
     noNeed = ".txt"
 
     for article in articles:
        vektor = former.makeStem(article.content)
-       vektor_list.append(Vector(re.sub(noNeed,"",article.filename), vektor))
-
-    for vektor in vektor_list:
-      context.create(vektor.to_json())
+       print(article.filename + "isimli dosya stemlendi")
+       vector = Vector(re.sub(noNeed,"",article.filename), vektor).to_dict()
+       context.create(vector)
+       print(vector['name'] + " db'de")
+      
 
     return {"Başarıyla Tamamlandı"}
 
@@ -86,7 +92,6 @@ async def makeVektor3(prm: str):
     vector = Vector(prm, vectors)
     return json.loads(vector.to_json())
 
-
 @app.post("/api/makeVectorByWordwithScibert/{prm}")
 async def makeVektor3(prm : str):
       content = prm
@@ -96,15 +101,15 @@ async def makeVektor3(prm : str):
 
       return {"vector": vector}
 
-@app.get("/api/calculateSimilarity")
+@app.post("/api/calculateSimilarityFastText")
 async def calculateSimilarity(request: Request):
     getter = DataRead()
-    context = ConnectDB()
+    context = ConnectDB("FastText")
     data = await request.json()
 
     if data is None:
         error_message = "Parametre boş dönüyor"
-        return {"error": error_message}
+        return {"error": error_message }
 
     vector1ID = data["vector1"]
     vector2ID = data["vector2"]
@@ -113,7 +118,7 @@ async def calculateSimilarity(request: Request):
     vector2Json = None
 
     for temp in allVector:
-        vector = temp['vector']
+        vector = temp
         if  vector1ID == vector['name']:
             vector1Json = vector
         elif vector2ID == vector['name']:
@@ -131,9 +136,10 @@ async def calculateSimilarity(request: Request):
     
     return {'ERROR'}
     
-@app.get("/api/forInterestFastText/{prm}")
-async def forInterestFastText(prm : str):
-    interestWord = prm
+@app.post("/api/forInterestFastText")
+async def forInterestFastText(request: Request):
+    data = await request.json()
+    interestWord = [data["word"]]
     context = ConnectDB("FastText")
     getter = DataRead()
     former = DataStem('/Users/frowing/Downloads/cc.en.300.bin')
@@ -142,14 +148,84 @@ async def forInterestFastText(prm : str):
     suggestionList = []
 
     for tempVector in articles:
-      vector = tempVector['vector']
-      print(vector)
-      rate = getter.cosine_similarity(interestVector, vector)
-      vector = arrangementModel(tempVector['name'], rate, "FastText")
+      rate = getter.cosine_similarity(interestVector, tempVector['vector'])
+      vector = arrangementModel(tempVector['name'], round(rate * 100, 2), "FastText")
       suggestionList.append(vector)
 
     suggestionList.sort(key=lambda x: x.samerate, reverse=True)
 
     suggestionResult = suggestionList[:5]
     
-    return { suggestionList }
+    return {"vectorsList" : suggestionResult }
+
+@app.post("/api/forInterestScibert")
+async def forInterestFastText(request: Request):
+    data = await request.json()
+    interestWord = data["word"]
+    context = ConnectDB("Scibert")
+    getter = DataRead()
+    former = DataStem2()
+    interestVector = former.makeStem(interestWord)
+    articles = context.getAll()
+    suggestionList = []
+
+    for tempVector in articles:
+      rate = getter.cosine_similarity(interestVector, tempVector['vector'])
+      vector = arrangementModel(tempVector['name'], round(rate * 100, 2), "Scibert")
+      suggestionList.append(vector)
+
+    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
+
+    suggestionResult = suggestionList[:5]
+    
+    return {"vectorsList" : suggestionResult }
+
+@app.post("/api/forLikedFastText/{prm}")
+async def forLikedFastText(prm: str):
+    articleID = prm
+    getter = DataRead()
+    context = ConnectDB("FastText")
+    allVector = context.getAll()
+    vectorJson = None
+    suggestionList = []
+    
+    for temp in allVector:
+        vector = temp
+        if  articleID == vector['name']:
+            vectorJson = vector
+            
+    for tempVector in allVector:
+      rate = getter.cosine_similarity(vectorJson, tempVector['vector'])
+      vector = arrangementModel(tempVector['name'], round(rate * 100, 2), "Scibert")
+      suggestionList.append(vector)
+      
+    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
+
+    suggestionResult = suggestionList[:5]
+    
+    return {"vectorsList" : suggestionResult }
+
+@app.post("/api/forLikedScibert/{prm}")
+async def forLikedFastText(prm: str):
+    articleID = prm
+    getter = DataRead()
+    context = ConnectDB("Scibert")
+    allVector = context.getAll()
+    vectorJson = None
+    suggestionList = []
+    
+    for temp in allVector:
+        vector = temp
+        if  articleID == vector['name']:
+            vectorJson = vector
+            
+    for tempVector in allVector:
+      rate = getter.cosine_similarity(vectorJson, tempVector['vector'])
+      vector = arrangementModel(tempVector['name'], round(rate * 100, 2), "Scibert")
+      suggestionList.append(vector)
+      
+    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
+
+    suggestionResult = suggestionList[:5]
+    
+    return {"vectorsList" : suggestionResult }

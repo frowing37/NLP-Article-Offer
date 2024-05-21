@@ -6,7 +6,7 @@ class DataStem2:
   def makeStem(self, contents):
      tokenizer = AutoTokenizer.from_pretrained('allenai/scibert_scivocab_uncased')
      model = AutoModel.from_pretrained('allenai/scibert_scivocab_uncased')
-     text = "Bilimsel metinleri vektörleştirmek için SciBERT kullanıyoruz."
+     text = contents
      inputs = tokenizer(text, return_tensors='pt')
      with torch.no_grad():
          outputs = model(**inputs)

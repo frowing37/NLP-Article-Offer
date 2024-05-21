@@ -55,9 +55,14 @@ class DataRead:
                     # Hata durumunda devam et
                     continue
         
-        return file_contents
+        result = articleModel(file_name,content)
+        return result
 
     def cosine_similarity(self, vector1, vector2):
+     
+     if vector1 is None or vector2 is None:
+      print("Cosine parametreler boş geliyo")
+
      vector1_array = np.array(vector1)
      vector2_array = np.array(vector2)
      similarity = cosine_similarity(vector1_array.reshape(1, -1), vector2_array.reshape(1, -1))[0, 0]
