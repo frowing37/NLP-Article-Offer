@@ -4,8 +4,8 @@ public class InterestforApi
 {
     public InterestforApi(string ınterestWord)
     {
-        InterestWord = ınterestWord;
+        Word = ınterestWord;
     }
 
-    public string InterestWord { get; set; }
+    public string Word { get; set; }
 }

@@ -12,4 +12,8 @@ public class Context : IdentityDbContext<AppUser,AppRole,int>
     }
     
     public DbSet<Interest> Interests { get; set; }
+    
+    public DbSet<History> Histories { get; set; }
+    
+    public DbSet<Liked> Likeds { get; set; }
 }

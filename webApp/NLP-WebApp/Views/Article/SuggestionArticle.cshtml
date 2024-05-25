@@ -10,11 +10,13 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">@article.Header</h4>
-                <p><span class="font-weight-bold">Kaynak: @article.Source / CS Oranı: %@article.CSRate </span>
-                    <br/>
-                    @article.Content</p>
+                <span class="font-weight-bold"> Kaynak: @article.Source / CS Oranı: @article.CSRate</span>
+                <br/>
+                <p>
+                    @article.Content
+                </p>
                 <a href="/Article/DetailArticle/@article.ArticleID" class="btn btn-inverse-info btn-fw">Detay</a>
-                <a href="/Article/LikedArticle/@article.ArticleID"><button type="button" class="btn btn-inverse-primary btn-fw">Ekle</button></a>
+                <a href="/Article/DetailArticle/@article.ArticleID" class="btn btn-inverse-primary btn-fw">Ekle</a>
             </div>
         </div>
     </div>
