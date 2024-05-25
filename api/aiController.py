@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI, Request
 import sys
 import re
@@ -24,6 +25,7 @@ async def getAllArticle(prm: str):
     getter = DataRead()
     article = getter.readTxtByName(prm + ".txt")
     return article
+
 
 @app.post("/api/makeVectorAllwithFasttext/")
 async def makeVektorAll():
@@ -156,10 +158,10 @@ async def forInterestFastText(request: Request):
 
     suggestionResult = suggestionList[:5]
     
-    return {"vectorsList" : suggestionResult }
+    return {"list" : suggestionResult }
 
 @app.post("/api/forInterestScibert")
-async def forInterestFastText(request: Request):
+async def forInterestScibert(request: Request):
     data = await request.json()
     interestWord = data["word"]
     context = ConnectDB("Scibert")
@@ -178,54 +180,58 @@ async def forInterestFastText(request: Request):
 
     suggestionResult = suggestionList[:5]
     
-    return {"vectorsList" : suggestionResult }
+    return { "list" : suggestionResult }
 
-@app.post("/api/forLikedFastText/{prm}")
-async def forLikedFastText(prm: str):
-    articleID = prm
+@app.post("/api/forLikedFastText")
+async def forLikedFastText(request: Request):
+    articleIDs: List[int] = (await request.json())
+
     getter = DataRead()
     context = ConnectDB("FastText")
-    allVector = context.getAll()
-    vectorJson = None
-    suggestionList = []
+    allVector = list(context.getAll())
     
-    for temp in allVector:
-        vector = temp
-        if  articleID == vector['name']:
-            vectorJson = vector
-            
-    for tempVector in allVector:
-      rate = getter.cosine_similarity(vectorJson, tempVector['vector'])
-      vector = arrangementModel(tempVector['name'], round(rate * 100, 2), "Scibert")
-      suggestionList.append(vector)
-      
-    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
+    liked_vectors = [vector for vector in allVector if vector['name'] in articleIDs]
+    other_vectors = [vector for vector in allVector if vector['name'] not in articleIDs]
+    
+    suggestionList = []
 
+    for other_vector in other_vectors:
+        highest_similarity = 0
+        for liked_vector in liked_vectors:
+            similarity = getter.cosine_similarity(other_vector['vector'], liked_vector['vector'])
+            if similarity > highest_similarity:
+                highest_similarity = similarity
+        temp = arrangementModel(other_vector['name'], round(highest_similarity * 100, 2), "FastText")
+        suggestionList.append(temp)
+             
+    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
     suggestionResult = suggestionList[:5]
     
-    return {"vectorsList" : suggestionResult }
+    return {"list": [sug.__dict__ for sug in suggestionResult]}
 
-@app.post("/api/forLikedScibert/{prm}")
-async def forLikedFastText(prm: str):
-    articleID = prm
+@app.post("/api/forLikedScibert")
+async def forLikedScibert(request: Request):
+    articleIDs: List[int] = (await request.json())
+
     getter = DataRead()
     context = ConnectDB("Scibert")
-    allVector = context.getAll()
-    vectorJson = None
-    suggestionList = []
+    allVector = list(context.getAll())
     
-    for temp in allVector:
-        vector = temp
-        if  articleID == vector['name']:
-            vectorJson = vector
-            
-    for tempVector in allVector:
-      rate = getter.cosine_similarity(vectorJson, tempVector['vector'])
-      vector = arrangementModel(tempVector['name'], round(rate * 100, 2), "Scibert")
-      suggestionList.append(vector)
-      
-    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
+    liked_vectors = [vector for vector in allVector if vector['name'] in articleIDs]
+    other_vectors = [vector for vector in allVector if vector['name'] not in articleIDs]
+    
+    suggestionList = []
 
+    for other_vector in other_vectors:
+        highest_similarity = 0
+        for liked_vector in liked_vectors:
+            similarity = getter.cosine_similarity(other_vector['vector'], liked_vector['vector'])
+            if similarity > highest_similarity:
+                highest_similarity = similarity
+        temp = arrangementModel(other_vector['name'], round(highest_similarity * 100, 2), "Scibert")
+        suggestionList.append(temp)
+             
+    suggestionList.sort(key=lambda x: x.samerate, reverse=True)
     suggestionResult = suggestionList[:5]
     
-    return {"vectorsList" : suggestionResult }
+    return {"list": [sug.__dict__ for sug in suggestionResult]}
